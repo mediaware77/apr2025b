@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function sendAsJson(submitButton, originalButtonText) {
         console.log('Tentando enviar como JSON...');
         
-        const webhookUrl = 'https://n8n.mediaware.com.br/webhook-test/0e1cec2b-acd2-49cc-ab60-52e2b29e6494';
+        const webhookUrl = 'https://webhook.mediaware.com.br/webhook/0e1cec2b-acd2-49cc-ab60-52e2b29e6494';
         
         // Criar objeto com os dados do formulário
         const formDataJson = {
@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Se chegou aqui, o formulário é válido
         // Vamos enviar os dados para o webhook
-        const webhookUrl = 'https://n8n.mediaware.com.br/webhook-test/0e1cec2b-acd2-49cc-ab60-52e2b29e6494';
+        const webhookUrl = 'https://webhook.mediaware.com.br/webhook/0e1cec2b-acd2-49cc-ab60-52e2b29e6494';
         
         // Criar um objeto FormData para enviar os arquivos
         const formData = new FormData();
