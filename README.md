@@ -13,6 +13,24 @@ Este projeto consiste em uma página web responsiva para exibir o calendário da
 - Estilização moderna com CSS3 e variáveis CSS
 - Interatividade com JavaScript puro
 
+## Screenshots
+
+### Cabeçalho e Seção Principal
+![Cabeçalho e Hero Section](screenshots/header-hero.png)
+*Design moderno com cabeçalho em azul, barra superior amarela e logo da prefeitura. A seção principal apresenta um título destacado e uma descrição clara do propósito das Assembleias Populares.*
+
+### Calendário de Assembleias
+![Visão do Calendário](screenshots/calendar-view.png)
+*Organização clara das assembleias por região, com cards interativos que mostram informações detalhadas sobre bairros, datas, horários e locais de cada assembleia.*
+
+### Versão Mobile
+![Visualização Mobile](screenshots/mobile-view.png)
+*Layout responsivo otimizado para dispositivos móveis, mantendo a legibilidade e usabilidade em telas menores.*
+
+### Rodapé
+![Rodapé](screenshots/footer-view.png)
+*Rodapé com logo da cidade e informações de copyright, mantendo a identidade visual do site.*
+
 ## Estrutura do Projeto
 
 ```
