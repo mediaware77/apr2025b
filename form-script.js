@@ -46,6 +46,12 @@ document.addEventListener('DOMContentLoaded', function() {
         this.value = this.value.replace(/\D/g, '');
     });
     
+    // Converter o campo de bairro para maiúsculas
+    bairroInput.addEventListener('input', function() {
+        // Converter para maiúsculas
+        this.value = this.value.toUpperCase();
+    });
+    
     // Atualizar o campo de bairro com base na região selecionada
     regiaoSelect.addEventListener('change', function() {
         // Esta função poderia ser expandida para preencher automaticamente o bairro
@@ -56,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function sendAsJson(submitButton, originalButtonText) {
         console.log('Tentando enviar como JSON...');
         
-        const webhookUrl = 'https://webhook.mediaware.com.br/webhook/0e1cec2b-acd2-49cc-ab60-52e2b29e6494';
+        const webhookUrl = 'https://n8n.mediaware.com.br/webhook-test/0e1cec2b-acd2-49cc-ab60-52e2b29e6494';
         
         // Criar objeto com os dados do formulário
         const formDataJson = {
@@ -148,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Se chegou aqui, o formulário é válido
         // Vamos enviar os dados para o webhook
-        const webhookUrl = 'https://webhook.mediaware.com.br/webhook/0e1cec2b-acd2-49cc-ab60-52e2b29e6494';
+        const webhookUrl = 'https://n8n.mediaware.com.br/webhook-test/0e1cec2b-acd2-49cc-ab60-52e2b29e6494';
         
         // Criar um objeto FormData para enviar os arquivos
         const formData = new FormData();
