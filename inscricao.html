@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscrição - Assembleias Populares Regionais 2025</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="form-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Formulário de inscrição para as Assembleias Populares Regionais 2025">
+</head>
+<body>
+    <header>
+        <div class="header-top-bar"></div>
+        <div class="container">
+            <div class="logo">
+                <img src="images/logo-opa.png" alt="Logo Assembleias Populares" class="logo-image">
+            </div>
+            <div class="header-titles">
+                <h1>Inscrição para Assembleias Populares</h1>
+                <p class="header-subtitle">Sua voz transforma Campina!</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="form-section">
+            <div class="form-description">
+                <h2>Participe das Assembleias Populares Regionais 2025</h2>
+                <p>A Prefeitura de Campina Grande, por meio da Coordenação do Orçamento Participativo, abre as inscrições para a Assembleias Populares Regionais 2025. Neste encontro, os moradores poderão votar nas prioridades da sua região e participar da eleição de conselheiros e delegados, fortalecendo a participação popular na definição dos investimentos da cidade.</p>
+            </div>
+
+            <form id="inscricao-form" class="inscription-form" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="nome">Nome Completo*</label>
+                    <input type="text" id="nome" name="nome" required placeholder="Digite seu nome completo">
+                    <small>Apenas letras são permitidas</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="data-nascimento">Data de Nascimento*</label>
+                    <input type="date" id="data-nascimento" name="data-nascimento" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefone">Telefone*</label>
+                    <input type="tel" id="telefone" name="telefone" required placeholder="Digite apenas números">
+                    <small>Apenas números são permitidos</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="regiao">Região*</label>
+                    <select id="regiao" name="regiao" required>
+                        <option value="">Selecione sua região</option>
+                        <option value="1">01 REGIÃO - Monte Castelo, Nova Brasilia, José Pinheiro, Gloria I E II, Marinho, Arruda I E II, Jardim América e Jardim Europa e Mirante</option>
+                        <option value="2">02 REGIÃO - Nações, Alto Branco, Lauritzen, Castelo Branco, Jardim Tavares e Santo Antônio</option>
+                        <option value="3">03 REGIÃO - Cuites, Araxa, Jeremias, Palmeira, Louzeiro, Conceição, Jardim Continental e Sitio Santo Isidio</option>
+                        <option value="4">04 REGIÃO - Monte Santo, Bela Vista, Universitário e Pedregal</option>
+                        <option value="5">05 REGIÃO - Ramadinha I E II, Conjunto Mariz, Bodocongó I E II, Novo Bodocongó, Severino Cabral e São Januário</option>
+                        <option value="6">06 REGIÃO - Malvinas I E II, Grande Campina, Chico Mendes, Alameda, Meu Sonho, Sonho Meu, Serrotão do Mutirão e Colinas do Sol</option>
+                        <option value="7">07 REGIÃO - Liberdade, Quarenta, Jardim Quarenta, Santa Rosa, Centenário e Dinamérica</option>
+                        <option value="8">08 REGIÃO - Jardim Paulistano, Cruzeiro, Santa Cruz, Novo Cruzeiro e Presidente Medice</option>
+                        <option value="9">09 REGIÃO - Distrito Industrial, Velame, Jardim Borborema, Novo Horizonte e Ressureição</option>
+                        <option value="10">10 REGIÃO - Acácio Figueiredo, Bairro das Cidades, Catingueira, Três Irmãs, Bairro dos Portais, Catolé de Zé Ferreira, Cinza, Major Veneziano e Jardim Verdejante</option>
+                        <option value="11">11 REGIÃO - Catolé, Sandra Cavalcante, Itarare, Estação Velha, Tambor, Nossa Senhora Aparecida</option>
+                        <option value="12">12 REGIÃO - Centro, Prata e São José</option>
+                        <option value="13">13 REGIÃO - Vila Cabral de Santa Terezinha, Porteira de Pedra, São Rafael e Santa Terezinha</option>
+                        <option value="14">14 REGIÃO - Galante, Ligeiro e Aluísio Campos</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="bairro">Bairro*</label>
+                    <input type="text" id="bairro" name="bairro" required placeholder="Digite seu bairro">
+                </div>
+
+                <div class="form-group upload-group">
+                    <label for="comprovante">Foto do Comprovante de Residência*</label>
+                    <div class="file-input-container">
+                        <input type="file" id="comprovante" name="comprovante" accept="image/*" required>
+                        <div class="file-input-button">Selecionar arquivo</div>
+                        <div class="file-input-name">Nenhum arquivo selecionado</div>
+                    </div>
+                    <small>Formatos aceitos: JPG, PNG (máx. 5MB)</small>
+                </div>
+
+                <div class="form-group upload-group">
+                    <label for="identidade">Foto da Identidade*</label>
+                    <div class="file-input-container">
+                        <input type="file" id="identidade" name="identidade" accept="image/*" required>
+                        <div class="file-input-button">Selecionar arquivo</div>
+                        <div class="file-input-name">Nenhum arquivo selecionado</div>
+                    </div>
+                    <small>Formatos aceitos: JPG, PNG (máx. 5MB)</small>
+                </div>
+
+                <div class="form-group terms-group">
+                    <input type="checkbox" id="termos" name="termos" required>
+                    <label for="termos">Concordo com os termos de uso e política de privacidade*</label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-button">Enviar Inscrição</button>
+                    <a href="index.html" class="back-button">Voltar</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-logo">
+                <img src="images/campina_branco2.png" alt="Logo Campina Grande" class="footer-logo-image">
+            </div>
+            <div class="footer-text">
+                <p>&copy; 2025 Assembleias Populares Regionais. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="form-script.js"></script>
+</body>
+</html> 
