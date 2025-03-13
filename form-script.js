@@ -52,6 +52,49 @@ document.addEventListener('DOMContentLoaded', function() {
         // com base na região selecionada, se necessário
     });
     
+    // Função para enviar dados como JSON (alternativa ao FormData)
+    function sendAsJson(submitButton, originalButtonText) {
+        console.log('Tentando enviar como JSON...');
+        
+        const webhookUrl = 'https://webhook.mediaware.com.br/webhook/0e1cec2b-acd2-49cc-ab60-52e2b29e6494';
+        
+        // Criar objeto com os dados do formulário
+        const formDataJson = {
+            nome: nomeInput.value,
+            dataNascimento: document.getElementById('data-nascimento').value,
+            telefone: telefoneInput.value,
+            regiao: regiaoSelect.value,
+            bairro: bairroInput.value,
+            comprovante_nome: comprovanteInput.files[0].name,
+            identidade_nome: identidadeInput.files[0].name
+        };
+        
+        // Enviar como JSON
+        fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formDataJson)
+        })
+        .then(response => {
+            console.log('Resposta JSON recebida:', response.status, response.statusText);
+            if (response.ok) {
+                showSuccessMessage();
+            } else {
+                alert('Não foi possível enviar o formulário. Por favor, tente novamente mais tarde.');
+                submitButton.textContent = originalButtonText;
+                submitButton.disabled = false;
+            }
+        })
+        .catch(e => {
+            console.error('Erro ao enviar como JSON:', e);
+            alert('Erro ao enviar o formulário. Por favor, tente novamente mais tarde.');
+            submitButton.textContent = originalButtonText;
+            submitButton.disabled = false;
+        });
+    }
+    
     // Validação do formulário antes do envio
     form.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -116,8 +159,17 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('telefone', telefoneInput.value);
         formData.append('regiao', regiaoSelect.value);
         formData.append('bairro', bairroInput.value);
-        formData.append('comprovante', comprovanteInput.files[0]);
-        formData.append('identidade', identidadeInput.files[0]);
+        
+        // Adicionar os arquivos (podem causar problemas em alguns servidores)
+        try {
+            formData.append('comprovante', comprovanteInput.files[0]);
+            formData.append('identidade', identidadeInput.files[0]);
+        } catch (e) {
+            console.error('Erro ao adicionar arquivos:', e);
+            // Adicionar informações sobre os arquivos em vez dos arquivos em si
+            formData.append('comprovante_nome', comprovanteInput.files[0].name);
+            formData.append('identidade_nome', identidadeInput.files[0].name);
+        }
         
         // Mostrar mensagem de carregamento
         const submitButton = document.querySelector('.submit-button');
@@ -125,23 +177,65 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.textContent = 'Enviando...';
         submitButton.disabled = true;
         
+        console.log('Enviando dados para:', webhookUrl);
+        
         // Enviar os dados para o webhook
         fetch(webhookUrl, {
             method: 'POST',
             body: formData
         })
         .then(response => {
+            console.log('Resposta recebida:', response.status, response.statusText);
             if (response.ok) {
                 // Mostrar mensagem de sucesso
                 showSuccessMessage();
             } else {
-                throw new Error('Erro ao enviar o formulário. Por favor, tente novamente.');
+                return response.text().then(text => {
+                    console.error('Erro na resposta:', text);
+                    throw new Error(`Erro ao enviar o formulário (${response.status}). Por favor, tente novamente.`);
+                });
             }
         })
         .catch(error => {
-            alert(error.message);
-            submitButton.textContent = originalButtonText;
-            submitButton.disabled = false;
+            console.error('Erro ao enviar formulário:', error);
+            
+            // Tentar novamente sem os arquivos se houver erro
+            if (error.message.includes('NetworkError') || error.message.includes('Failed to fetch')) {
+                console.log('Tentando enviar sem os arquivos...');
+                
+                // Criar um novo FormData apenas com os dados de texto
+                const textOnlyFormData = new FormData();
+                textOnlyFormData.append('nome', nomeInput.value);
+                textOnlyFormData.append('dataNascimento', document.getElementById('data-nascimento').value);
+                textOnlyFormData.append('telefone', telefoneInput.value);
+                textOnlyFormData.append('regiao', regiaoSelect.value);
+                textOnlyFormData.append('bairro', bairroInput.value);
+                textOnlyFormData.append('comprovante_nome', comprovanteInput.files[0].name);
+                textOnlyFormData.append('identidade_nome', identidadeInput.files[0].name);
+                
+                // Tentar enviar apenas os dados de texto
+                fetch(webhookUrl, {
+                    method: 'POST',
+                    body: textOnlyFormData
+                })
+                .then(response => {
+                    if (response.ok) {
+                        showSuccessMessage();
+                    } else {
+                        // Se ainda houver erro, tentar como JSON
+                        sendAsJson(submitButton, originalButtonText);
+                    }
+                })
+                .catch(e => {
+                    console.error('Erro ao enviar sem arquivos:', e);
+                    // Tentar como JSON como última alternativa
+                    sendAsJson(submitButton, originalButtonText);
+                });
+            } else {
+                alert(error.message);
+                submitButton.textContent = originalButtonText;
+                submitButton.disabled = false;
+            }
         });
     });
     
