@@ -104,12 +104,45 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Se chegou aqui, o formulário é válido
-        // Aqui você pode adicionar o código para enviar os dados para o servidor
-        // Por enquanto, vamos apenas mostrar uma mensagem de sucesso
-        alert('Inscrição realizada com sucesso! Obrigado por participar.');
+        // Vamos enviar os dados para o webhook
+        const webhookUrl = 'https://webhook.mediaware.com.br/webhook/0e1cec2b-acd2-49cc-ab60-52e2b29e6494';
         
-        // Redirecionar para a página inicial após o envio bem-sucedido
-        // window.location.href = 'index.html';
+        // Criar um objeto FormData para enviar os arquivos
+        const formData = new FormData();
+        
+        // Adicionar os dados do formulário
+        formData.append('nome', nomeInput.value);
+        formData.append('dataNascimento', document.getElementById('data-nascimento').value);
+        formData.append('telefone', telefoneInput.value);
+        formData.append('regiao', regiaoSelect.value);
+        formData.append('bairro', bairroInput.value);
+        formData.append('comprovante', comprovanteInput.files[0]);
+        formData.append('identidade', identidadeInput.files[0]);
+        
+        // Mostrar mensagem de carregamento
+        const submitButton = document.querySelector('.submit-button');
+        const originalButtonText = submitButton.textContent;
+        submitButton.textContent = 'Enviando...';
+        submitButton.disabled = true;
+        
+        // Enviar os dados para o webhook
+        fetch(webhookUrl, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                // Mostrar mensagem de sucesso
+                showSuccessMessage();
+            } else {
+                throw new Error('Erro ao enviar o formulário. Por favor, tente novamente.');
+            }
+        })
+        .catch(error => {
+            alert(error.message);
+            submitButton.textContent = originalButtonText;
+            submitButton.disabled = false;
+        });
     });
     
     // Função para mostrar mensagem de sucesso
@@ -130,4 +163,4 @@ document.addEventListener('DOMContentLoaded', function() {
         formSection.innerHTML = '';
         formSection.appendChild(successMessage);
     }
-}); 
+});
