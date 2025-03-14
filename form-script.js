@@ -12,20 +12,69 @@ document.addEventListener('DOMContentLoaded', function() {
     // Referências aos elementos de exibição do nome do arquivo
     const fileInputs = document.querySelectorAll('input[type="file"]');
     
-    // Configurar data máxima como hoje
-    const hoje = new Date();
-    const dataMaxima = new Date(hoje.getFullYear() - 16, hoje.getMonth(), hoje.getDate());
-    const dataMinima = new Date(hoje.getFullYear() - 100, hoje.getMonth(), hoje.getDate());
+    // Função para aplicar máscara de data DD/MM/AAAA
+    function mascaraData(input) {
+        let v = input.value;
+        
+        // Remove tudo que não é dígito
+        v = v.replace(/\D/g, '');
+        
+        // Aplica a máscara DD/MM/AAAA
+        if (v.length > 2) v = v.substring(0, 2) + '/' + v.substring(2);
+        if (v.length > 5) v = v.substring(0, 5) + '/' + v.substring(5, 9);
+        
+        // Atualiza o valor do input
+        input.value = v;
+    }
     
-    dataNascimentoInput.max = dataMaxima.toISOString().split('T')[0];
-    dataNascimentoInput.min = dataMinima.toISOString().split('T')[0];
+    // Função para validar a data no formato DD/MM/AAAA
+    function validarData(dataStr) {
+        // Verifica o formato DD/MM/AAAA
+        if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dataStr)) {
+            return false;
+        }
+        
+        // Divide a data em dia, mês e ano
+        const partes = dataStr.split('/');
+        const dia = parseInt(partes[0], 10);
+        const mes = parseInt(partes[1], 10) - 1; // Mês em JS começa em 0
+        const ano = parseInt(partes[2], 10);
+        
+        // Verifica se a data é válida
+        const dataObj = new Date(ano, mes, dia);
+        if (
+            dataObj.getFullYear() !== ano ||
+            dataObj.getMonth() !== mes ||
+            dataObj.getDate() !== dia
+        ) {
+            return false;
+        }
+        
+        // Verifica idade mínima (16 anos)
+        const hoje = new Date();
+        const idadeMinima = new Date(hoje.getFullYear() - 16, hoje.getMonth(), hoje.getDate());
+        
+        // Verifica se a data não é futura e se tem pelo menos 16 anos
+        return dataObj <= hoje && dataObj <= idadeMinima;
+    }
     
-    // Validar idade mínima ao selecionar data
-    dataNascimentoInput.addEventListener('change', function() {
-        const dataSelecionada = new Date(this.value);
-        if (dataSelecionada > dataMaxima) {
-            alert('Você deve ter pelo menos 16 anos para participar.');
+    // Adiciona a máscara ao campo de data
+    dataNascimentoInput.addEventListener('input', function() {
+        mascaraData(this);
+    });
+    
+    // Validar data ao sair do campo
+    dataNascimentoInput.addEventListener('blur', function() {
+        const dataStr = this.value;
+        
+        // Se o campo estiver vazio, não valida
+        if (!dataStr) return;
+        
+        // Valida a data
+        if (!validarData(dataStr)) {
+            alert('Data inválida ou você deve ter pelo menos 16 anos para participar.');
             this.value = '';
+            this.focus();
         }
     });
     
@@ -82,10 +131,13 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const webhookUrl = 'https://webhook.mediaware.com.br/webhook/0e1cec2b-acd2-49cc-ab60-52e2b29e6494';
         
+        // Converter a data de DD/MM/AAAA para YYYY-MM-DD (formato ISO)
+        const dataNascimento = convertDataParaISO(dataNascimentoInput.value);
+        
         // Criar objeto com os dados do formulário
         const formDataJson = {
             nome: nomeInput.value,
-            dataNascimento: document.getElementById('data-nascimento').value,
+            dataNascimento: dataNascimento,
             telefone: telefoneInput.value,
             regiao: regiaoSelect.value,
             bairro: bairroInput.value,
@@ -119,6 +171,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Função para converter data do formato DD/MM/AAAA para YYYY-MM-DD
+    function convertDataParaISO(dataStr) {
+        if (!dataStr || !dataStr.includes('/')) return '';
+        
+        const partes = dataStr.split('/');
+        if (partes.length !== 3) return '';
+        
+        const dia = partes[0];
+        const mes = partes[1];
+        const ano = partes[2];
+        
+        return `${ano}-${mes}-${dia}`;
+    }
+    
     // Validação do formulário antes do envio
     form.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -130,6 +196,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!nomeInput.value.trim()) {
             isValid = false;
             errorMessage += 'Por favor, informe seu nome completo.\n';
+        }
+        
+        // Validar data de nascimento
+        if (!dataNascimentoInput.value.trim()) {
+            isValid = false;
+            errorMessage += 'Por favor, informe sua data de nascimento.\n';
+        } else if (!validarData(dataNascimentoInput.value)) {
+            isValid = false;
+            errorMessage += 'Data de nascimento inválida ou você deve ter pelo menos 16 anos.\n';
         }
         
         // Validar telefone (não vazio e apenas números)
@@ -179,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Adicionar os dados do formulário
         formData.append('nome', nomeInput.value);
-        formData.append('dataNascimento', document.getElementById('data-nascimento').value);
+        formData.append('dataNascimento', convertDataParaISO(dataNascimentoInput.value));
         formData.append('telefone', telefoneInput.value);
         formData.append('regiao', regiaoSelect.value);
         formData.append('bairro', bairroInput.value);
@@ -230,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Criar um novo FormData apenas com os dados de texto
                 const textOnlyFormData = new FormData();
                 textOnlyFormData.append('nome', nomeInput.value);
-                textOnlyFormData.append('dataNascimento', document.getElementById('data-nascimento').value);
+                textOnlyFormData.append('dataNascimento', convertDataParaISO(dataNascimentoInput.value));
                 textOnlyFormData.append('telefone', telefoneInput.value);
                 textOnlyFormData.append('regiao', regiaoSelect.value);
                 textOnlyFormData.append('bairro', bairroInput.value);
