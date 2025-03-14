@@ -308,36 +308,84 @@ h1 {
 }
 
 .week {
-    margin-bottom: 40px;
+    margin-bottom: 60px; /* Aumentado para maior separação entre semanas */
     position: relative;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada */
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(30, 58, 108, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.week::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    top: 0;
+    left: 0;
+    background: linear-gradient(90deg, 
+        var(--happy-yellow), 
+        var(--happy-orange), 
+        var(--happy-pink), 
+        var(--happy-blue), 
+        var(--happy-green)
+    );
+    z-index: 1;
+}
+
+.week:hover {
+    transform: translateY(-5px);
+}
+
+.week::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+    right: 0;
+    height: 15px;
+    background-image: linear-gradient(to bottom, rgba(0,0,0,0.05), transparent);
 }
 
 .week h3 {
     background-color: var(--header-text-dark);
     color: var(--light-text);
-    padding: 15px;
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
-    font-size: var(--font-size-xlarge);
+    padding: 18px 25px; /* Aumentado para maior destaque */
+    border-radius: 0;
+    font-size: calc(var(--font-size-xlarge) + 2px); /* Tamanho aumentado */
     font-family: 'Baloo 2', cursive;
     display: flex;
     align-items: center;
     background-image: linear-gradient(135deg, var(--header-text-dark), #2a4b8c);
+    position: relative;
+    z-index: 2;
+    letter-spacing: 1px; /* Melhora a legibilidade */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .week h3 i {
     color: var(--happy-yellow);
-    margin-right: 10px;
+    margin-right: 15px; /* Espaçamento maior */
     animation: spin 4s linear infinite;
+    font-size: 1.2em; /* Ícone maior */
 }
 
 .region {
     background-color: var(--card-background);
     border-radius: 0 0 var(--border-radius) var(--border-radius);
-    margin-bottom: 20px;
+    margin: 0 15px 20px; /* Adicionadas margens laterais */
     box-shadow: var(--box-shadow);
     overflow: hidden;
     transition: var(--transition);
     border-left: 3px solid var(--happy-blue);
+    position: relative;
+}
+
+.region:last-child {
+    margin-bottom: 25px; /* Maior margem no último item */
 }
 
 .region:hover {
@@ -858,10 +906,16 @@ footer {
     }
     
     .week {
-        margin-bottom: 30px;
+        margin-bottom: 50px;
+        margin-top: 30px;
+    }
+    
+    .week::before {
+        height: 3px;
     }
     
     .week h3 {
+        padding: 15px 20px;
         font-size: var(--font-size-xlarge);
     }
     
@@ -879,11 +933,11 @@ footer {
     }
     
     .region {
-        margin-bottom: 15px;
+        margin: 0 10px 15px;
     }
     
-    .region:hover {
-        transform: translateY(-3px);
+    .region:last-child {
+        margin-bottom: 20px;
     }
     
     .footer-container {
@@ -1002,11 +1056,16 @@ footer {
     }
     
     .week {
-        margin-bottom: 20px;
+        margin-bottom: 40px;
+        margin-top: 25px;
     }
     
     .week h3 {
-        padding: 12px;
+        padding: 12px 15px;
+    }
+    
+    .week h3 i {
+        margin-right: 10px;
     }
     
     .region-header {
@@ -1063,7 +1122,7 @@ footer {
     }
     
     .region {
-        margin-bottom: 12px;
+        margin: 0 5px 10px;
     }
     
     .cta-button {
