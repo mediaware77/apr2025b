@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Referências aos elementos do formulário
     const form = document.getElementById('inscricao-form');
     const nomeInput = document.getElementById('nome');
+    const dataNascimentoInput = document.getElementById('data-nascimento');
     const telefoneInput = document.getElementById('telefone');
     const regiaoSelect = document.getElementById('regiao');
     const bairroInput = document.getElementById('bairro');
@@ -10,6 +11,23 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Referências aos elementos de exibição do nome do arquivo
     const fileInputs = document.querySelectorAll('input[type="file"]');
+    
+    // Configurar data máxima como hoje
+    const hoje = new Date();
+    const dataMaxima = new Date(hoje.getFullYear() - 16, hoje.getMonth(), hoje.getDate());
+    const dataMinima = new Date(hoje.getFullYear() - 100, hoje.getMonth(), hoje.getDate());
+    
+    dataNascimentoInput.max = dataMaxima.toISOString().split('T')[0];
+    dataNascimentoInput.min = dataMinima.toISOString().split('T')[0];
+    
+    // Validar idade mínima ao selecionar data
+    dataNascimentoInput.addEventListener('change', function() {
+        const dataSelecionada = new Date(this.value);
+        if (dataSelecionada > dataMaxima) {
+            alert('Você deve ter pelo menos 16 anos para participar.');
+            this.value = '';
+        }
+    });
     
     // Adicionar eventos para mostrar o nome do arquivo selecionado
     fileInputs.forEach(input => {
