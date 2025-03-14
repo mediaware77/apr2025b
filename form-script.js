@@ -12,25 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Referências aos elementos de exibição do nome do arquivo
     const fileInputs = document.querySelectorAll('input[type="file"]');
     
-    // Função para formatar data sem barras (DDMMAAAA) para formato com barras (DD/MM/AAAA)
-    function formatarDataComBarras(dataStr) {
-        // Se a string estiver vazia, retorna vazia
-        if (!dataStr) return '';
-        
-        // Remove caracteres não numéricos
-        let numerosApenas = dataStr.replace(/\D/g, '');
-        
-        // Se tiver exatamente 8 dígitos, formata como DD/MM/AAAA
-        if (numerosApenas.length === 8) {
-            return numerosApenas.substring(0, 2) + '/' + 
-                   numerosApenas.substring(2, 4) + '/' + 
-                   numerosApenas.substring(4, 8);
-        }
-        
-        // Se já tiver barras ou não tiver 8 dígitos, retorna a string original
-        return dataStr;
-    }
-    
     // Função para aplicar máscara de data DD/MM/AAAA
     function mascaraData(input) {
         let v = input.value;
@@ -38,14 +19,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Remove tudo que não é dígito
         v = v.replace(/\D/g, '');
         
-        // Verifica se o usuário digitou a data sem barras (ex: 17121987)
-        if (v.length === 8) {
-            v = v.substring(0, 2) + '/' + v.substring(2, 4) + '/' + v.substring(4, 8);
-        } else {
-            // Aplica a máscara DD/MM/AAAA gradualmente
-            if (v.length > 2) v = v.substring(0, 2) + '/' + v.substring(2);
-            if (v.length > 5) v = v.substring(0, 5) + '/' + v.substring(5, 9);
-        }
+        // Aplica a máscara DD/MM/AAAA
+        if (v.length > 2) v = v.substring(0, 2) + '/' + v.substring(2);
+        if (v.length > 5) v = v.substring(0, 5) + '/' + v.substring(5, 9);
         
         // Atualiza o valor do input
         input.value = v;
@@ -94,11 +70,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Se o campo estiver vazio, não valida
         if (!dataStr) return;
         
-        // Formata a data adicionando barras se necessário
-        this.value = formatarDataComBarras(dataStr);
-        
         // Valida a data
-        if (!validarData(this.value)) {
+        if (!validarData(dataStr)) {
             alert('Data inválida ou você deve ter pelo menos 16 anos para participar.');
             this.value = '';
             this.focus();
@@ -198,14 +171,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Função para converter data de DD/MM/AAAA para YYYY-MM-DD (formato ISO)
+    // Função para converter data do formato DD/MM/AAAA para YYYY-MM-DD
     function convertDataParaISO(dataStr) {
-        if (!dataStr) return '';
-        
-        // Formata a data adicionando barras se necessário
-        dataStr = formatarDataComBarras(dataStr);
-        
-        if (!dataStr.includes('/')) return '';
+        if (!dataStr || !dataStr.includes('/')) return '';
         
         const partes = dataStr.split('/');
         if (partes.length !== 3) return '';
@@ -234,14 +202,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!dataNascimentoInput.value.trim()) {
             isValid = false;
             errorMessage += 'Por favor, informe sua data de nascimento.\n';
-        } else {
-            // Formata a data adicionando barras se necessário
-            dataNascimentoInput.value = formatarDataComBarras(dataNascimentoInput.value);
-            
-            if (!validarData(dataNascimentoInput.value)) {
-                isValid = false;
-                errorMessage += 'Data de nascimento inválida ou você deve ter pelo menos 16 anos.\n';
-            }
+        } else if (!validarData(dataNascimentoInput.value)) {
+            isValid = false;
+            errorMessage += 'Data de nascimento inválida ou você deve ter pelo menos 16 anos.\n';
         }
         
         // Validar telefone (não vazio e apenas números)
