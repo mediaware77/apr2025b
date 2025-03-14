@@ -125,14 +125,42 @@ document.addEventListener('DOMContentLoaded', function() {
         // com base na região selecionada, se necessário
     });
     
+    // Função para converter data do formato DD/MM/AAAA para YYYY-MM-DD
+    function convertDataParaISO(dataStr) {
+        if (!dataStr || !dataStr.includes('/')) return '';
+        
+        const partes = dataStr.split('/');
+        if (partes.length !== 3) return '';
+        
+        const dia = partes[0];
+        const mes = partes[1];
+        const ano = partes[2];
+        
+        return `${ano}-${mes}-${dia}`;
+    }
+    
+    // Função para converter data do formato DD/MM/AAAA para DDMMYYYY
+    function convertDataParaDDMMYYYY(dataStr) {
+        if (!dataStr || !dataStr.includes('/')) return '';
+        
+        const partes = dataStr.split('/');
+        if (partes.length !== 3) return '';
+        
+        const dia = partes[0];
+        const mes = partes[1];
+        const ano = partes[2];
+        
+        return `${dia}${mes}${ano}`;
+    }
+    
     // Função para enviar dados como JSON (alternativa ao FormData)
     function sendAsJson(submitButton, originalButtonText) {
         console.log('Tentando enviar como JSON...');
         
         const webhookUrl = 'https://webhook.mediaware.com.br/webhook/0e1cec2b-acd2-49cc-ab60-52e2b29e6494';
         
-        // Converter a data de DD/MM/AAAA para YYYY-MM-DD (formato ISO)
-        const dataNascimento = convertDataParaISO(dataNascimentoInput.value);
+        // Converter a data para o formato DDMMYYYY
+        const dataNascimento = convertDataParaDDMMYYYY(dataNascimentoInput.value);
         
         // Criar objeto com os dados do formulário
         const formDataJson = {
@@ -169,20 +197,6 @@ document.addEventListener('DOMContentLoaded', function() {
             submitButton.textContent = originalButtonText;
             submitButton.disabled = false;
         });
-    }
-    
-    // Função para converter data do formato DD/MM/AAAA para YYYY-MM-DD
-    function convertDataParaISO(dataStr) {
-        if (!dataStr || !dataStr.includes('/')) return '';
-        
-        const partes = dataStr.split('/');
-        if (partes.length !== 3) return '';
-        
-        const dia = partes[0];
-        const mes = partes[1];
-        const ano = partes[2];
-        
-        return `${ano}-${mes}-${dia}`;
     }
     
     // Validação do formulário antes do envio
@@ -254,7 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Adicionar os dados do formulário
         formData.append('nome', nomeInput.value);
-        formData.append('dataNascimento', convertDataParaISO(dataNascimentoInput.value));
+        formData.append('dataNascimento', convertDataParaDDMMYYYY(dataNascimentoInput.value));
         formData.append('telefone', telefoneInput.value);
         formData.append('regiao', regiaoSelect.value);
         formData.append('bairro', bairroInput.value);
@@ -305,7 +319,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Criar um novo FormData apenas com os dados de texto
                 const textOnlyFormData = new FormData();
                 textOnlyFormData.append('nome', nomeInput.value);
-                textOnlyFormData.append('dataNascimento', convertDataParaISO(dataNascimentoInput.value));
+                textOnlyFormData.append('dataNascimento', convertDataParaDDMMYYYY(dataNascimentoInput.value));
                 textOnlyFormData.append('telefone', telefoneInput.value);
                 textOnlyFormData.append('regiao', regiaoSelect.value);
                 textOnlyFormData.append('bairro', bairroInput.value);
